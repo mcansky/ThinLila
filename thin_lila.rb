@@ -119,6 +119,11 @@ optparse = OptionParser.new do |opts|
     options[:debug] = true
   end
 
+  options[:list] = false
+  opts.on('-l', '--list', 'List the servers') do
+    options[:list] = true
+  end
+
   # start action
   options[:start] = false
   opts.on('--start', 'Start the servers') do
