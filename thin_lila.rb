@@ -83,19 +83,8 @@ class ThinServer
 
   # restart
   def restart
-    require 'pathname'
-    pid_dir = Pathname.new(self.chdir)
-    pid_file_template = "thin"
-    count = 0
-    pids = Array.new
-    while count != self.servers
-      pids << pid_dir.to_s + "/tmp/pids/#{pid_file_template}.#{self.port + count}.pid"
-      count += 1
-    end
-    pids.each do |d_pid|
-      Dir.chdir(self.chdir)
-      system("bundle exec thin -P #{d_pid} restart")
-    end
+    self.stop
+    self.start
   end
 end
 
