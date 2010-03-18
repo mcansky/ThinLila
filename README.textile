@@ -21,11 +21,13 @@ server:
 Then use the script using the following syntax :
 <pre>
 	Usage: thin_lila.rb [options]
-	    -c, --config DIR                 The dir where the yml config files are stored.
-	    -h, --help                       Display this screen.
-	        --start                      Start the servers
-	        --stop                       Stop the servers
-	        --restart                    Restart the servers
+    -c, --config DIR       The dir where the yml config files are stored.
+	  -h, --help             Display this screen.
+	  -t, --test             Display the commands that are going to be run
+	  -D, --debug            Set debug on.
+	      --start            Start the servers
+	      --stop             Stop the servers
+	      --restart          Restart the servers
 </pre>
 
 This program is released under the MIT license (see LICENSE file).
