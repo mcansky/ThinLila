@@ -67,7 +67,7 @@ class ThinServer
   # stop
   def stop
     require 'pathname'
-    pid_dir = Pathname.new(self.pid) + ".."
+    pid_dir = Pathname.new(self.chdir)
     pid_file_template = self.pid.split('/')[-1].gsub('.pid','')
     count = 0
     pids = Array.new
@@ -84,7 +84,7 @@ class ThinServer
   # restart
   def restart
     require 'pathname'
-    pid_dir = Pathname.new(self.pid) + ".."
+    pid_dir = Pathname.new(self.chdir)
     pid_file_template = self.pid.split('/')[-1].gsub('.pid','')
     count = 0
     pids = Array.new
