@@ -50,7 +50,7 @@ class ThinServer
     options << "-e #{self.env}"
     options << "-d" if self.daemonize
     options << "-l #{self.log}" if self.log
-    options << "-P #{self.pid}" if self.pid
+    #options << "-P #{self.pid}" if self.pid
     options << "-u #{self.duser}" if self.duser
     options << "-g #{self.dgroup}" if self.dgroup
     options << "-s #{self.servers}"
@@ -72,7 +72,7 @@ class ThinServer
     count = 0
     pids = Array.new
     while count != self.servers
-      pids << pid_dir.to_s + "/#{pid_file_template}.#{self.port + count}.pid"
+      pids << "tmp/#{pid_file_template}.#{self.port + count}.pid"
       count += 1
     end
     pids.each do |d_pid|
