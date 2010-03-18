@@ -59,7 +59,7 @@ class ThinServer
   # start method
   def start
     Dir.chdir(self.chdir)
-    system("bundle exec thin #{self.options} start 2&1 > /dev/null")
+    system("bundle exec thin #{self.options} start")
   end
 
   # stop
@@ -75,7 +75,7 @@ class ThinServer
     end
     pids.each do |d_pid|
       Dir.chdir(self.chdir)
-      system("bundle exec thin -P #{d_pid} stop 2&1 > /dev/null")
+      system("bundle exec thin -P #{d_pid} stop")
     end
   end
 
@@ -92,7 +92,7 @@ class ThinServer
     end
     pids.each do |d_pid|
       Dir.chdir(self.chdir)
-      system("bundle exec thin -P #{d_pid} restart 2&1 > /dev/null")
+      system("bundle exec thin -P #{d_pid} restart")
     end
   end
 end
