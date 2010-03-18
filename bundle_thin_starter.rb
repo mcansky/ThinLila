@@ -4,34 +4,78 @@ require 'yaml'
 
 # the class to handle the servers
 class ThinServer
+  attr_accessor :name, :chdir, :address, :port, :socket, :env, :daemonize, :log, :pid, :user, :group, :servers
   # initialize method
   # yml file syntax :
   #server:
-  #  name: one
-  #  address: 0.0.0.0
-  #  port: 3000
-  #  socket: nil
-  #  chdir: /Users/mcansky/Code/arbousier3/arbousierR
-  #  env: development
-  #  daemonize: true
-  #  duser: mcansky
-  #  dgroup: users
-  #  log: /Users/mcansky/Code/arbousier3/arbousierR/log/thin.log
-  #  pid: /Users/mcansky/tmp/thin_one.pid
-  #  servers: 3
+  #  name: one          # optional
+  #  address: 0.0.0.0   # mandatory
+  #  port: 3000         # mandatory
+  #  socket: nil        # optionnal
+  #  chdir: /Users/mcansky/Code/arbousier3/arbousierR   # mandatory
+  #  env: development   # mandatory
+  #  daemonize: true    # optionnal (default : false)
+  #  duser: mcansky     # optionnal
+  #  dgroup: users      # optionnal
+  #  log: /Users/mcansky/Code/arbousier3/arbousierR/log/thin.log  # mandatory
+  #  pid: /Users/mcansky/tmp/thin_one.pid     # mandatory
+  #  servers: 3         # optionnal (default : 5)
   def initialize(yaml_hash)
     @name = yaml_hash['name']
     @address = yaml_hash['address']
     @port = yaml_hash['port']
-    @socket = yaml_hash['socket']
+    if (yaml_hash['socket'] == 'nil')
+      @socket = nil
+    else
+      @socket = yaml_hash['socket']
+    end
     @chdir = yaml_hash['chdir']
     @env = yaml_hash['env']
-    @daemonize = yaml_hash['daemonize']
+    @daemonize = yaml_hash['daemonize'] || false
     @duser = yaml_hash['duser']
     @dgroup = yaml_hash['dgroup']
     @log = yaml_hash['log']
     @pid = yaml_hash['pid']
-    @servers = yaml_hash['servers']
+    @servers = yaml_hash['servers'] || 5
+  end
+
+  # return the option string
+  def options
+    options = Array.new
+    options << "-a #{self.address}"
+    options << "-p #{self.port}"
+    options << "-S #{self.socket}" if self.socket
+    options << "-e #{self.env}"
+    options << "-d" if self.daemonize
+    options << "-l #{self.log}" if self.log
+    options << "-P #{self.pid}" if self.pid
+    options << "-u #{self.user}" if self.user
+    options << "-g #{self.group}" if self.group
+    options << "-s #{self.servers}"
+    return options.join(" ")
+  end
+
+  # start method
+  def start
+    Dir.chdir(self.chdir)
+    system("bundle exec thin #{self.options} start")
+  end
+
+  # stop
+  def stop
+    require 'pathname'
+    pid_dir = Pathname.new(self.pid) + ".."
+    pid_file_template = self.pid.split('/')[-1].gsub('.pid','')
+    count = 0
+    pids = Array.new
+    while count != self.servers
+      pids << pid_dir.to_s + "/#{pid_file_template}.#{self.port + count}.pid"
+      count += 1
+    end
+    pids.each do |d_pid|
+      Dir.chdir(self.chdir)
+      system("bundle exec thin -P #{d_pid} stop")
+    end
   end
 end
 
@@ -39,5 +83,18 @@ servers = Array.new
 Dir['config/*.yml'].each do |f|
   servers << ThinServer.new(YAML.load_file(f)["server"])
 end
-puts servers.inspect
+servers.each do |s|
+  #printf("Starting #{s.name} thin server :")
+  #if s.start
+  #  printf("\tOK\n")
+  #else
+  #  printf("\tKO\n")
+  #end
+  printf("Stopping #{s.name} thin server : ")
+  if s.stop
+    printf("\tOK\n")
+  else
+    printf("\tKO\n")
+  end
+end
 
