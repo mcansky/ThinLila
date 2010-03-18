@@ -51,8 +51,8 @@ class ThinServer
     options << "-d" if self.daemonize
     options << "-l #{self.log}" if self.log
     options << "-P #{self.pid}" if self.pid
-    options << "-u #{self.user}" if self.user
-    options << "-g #{self.group}" if self.group
+    options << "-u #{self.duser}" if self.duser
+    options << "-g #{self.dgroup}" if self.dgroup
     options << "-s #{self.servers}"
     options << "-D" if self.debug
     return options.join(" ")
