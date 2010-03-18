@@ -118,6 +118,12 @@ optparse = OptionParser.new do |opts|
     exit
   end
   
+  # dry run
+  options[:test] = false
+  opts.on('-t', '--test', 'Display the commands that are going to be run') do
+    options[:test] = true
+  end
+  
   # debug / verbose
   options[:debug] = false
   opts.on('-D', '--debug', 'Set debug on.') do
@@ -152,7 +158,7 @@ end
 
 # triggering the commands
 
-if options[:start]
+if options[:start] && !options[:test]
   servers.each do |s|
     printf("Starting #{s.name} thin server :")
     s.debug = true if options[:debug]
@@ -165,7 +171,7 @@ if options[:start]
   end
 end
 
-if options[:restart]
+if options[:restart] && !options[:test]
   servers.each do |s|
     printf("Restarting #{s.name} thin server :")
     if s.restart
@@ -176,13 +182,23 @@ if options[:restart]
   end
 end
 
-if options[:stop]
+if options[:stop] && !options[:test]
   servers.each do |s|
     printf("Stopping #{s.name} thin server : ")
     if s.stop
       printf("\tOK\n")
     else
       printf("\tKO\n")
+    end
+  end
+end
+
+if options[:test]
+  servers.each do |s|
+    if options[:start]
+      puts "> bundle exec thin #{s.options} start"
+    end
+    if options[:stop]
     end
   end
 end
