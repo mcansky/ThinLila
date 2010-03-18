@@ -1,0 +1,31 @@
+This program is a quick starter of thin server instances inside a bundler environment.
+
+Create a config dir somewhere to hold yaml files using the following syntax :
+
+<pre>
+server:
+  name: one          # optional
+  address: 0.0.0.0   # mandatory
+  port: 3000         # mandatory
+  socket: nil        # optionnal
+  chdir: /Users/mcansky/Code/arbousier3/arbousierR   # mandatory
+  env: development   # mandatory
+  daemonize: true    # optionnal (default : false)
+  duser: mcansky     # optionnal
+  dgroup: users      # optionnal
+  log: /Users/mcansky/Code/arbousier3/arbousierR/log/thin.log  # mandatory
+  pid: /Users/mcansky/tmp/thin_one.pid     # mandatory
+  servers: 3         # optionnal (default : 5)
+</pre>
+
+Then use the script using the following syntax :
+<pre>
+	Usage: bundle_thin_starter.rb [options]
+	    -c, --config DIR                 The dir where the yml config files are stored.
+	    -h, --help                       Display this screen.
+	        --start                      Start the servers
+	        --stop                       Stop the servers
+	        --restart                    Restart the servers
+</pre>
+
+This program is released under the MIT license (see LICENSE file).
