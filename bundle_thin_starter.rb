@@ -1,5 +1,6 @@
 #!/bin/env ruby
 require 'yaml'
+require 'optionparser'
 # Bundle thin starter
 
 # the class to handle the servers
@@ -58,7 +59,7 @@ class ThinServer
   # start method
   def start
     Dir.chdir(self.chdir)
-    system("bundle exec thin #{self.options} start")
+    system("bundle exec thin #{self.options} start 2&1 > /dev/null")
   end
 
   # stop
@@ -74,27 +75,104 @@ class ThinServer
     end
     pids.each do |d_pid|
       Dir.chdir(self.chdir)
-      system("bundle exec thin -P #{d_pid} stop")
+      system("bundle exec thin -P #{d_pid} stop 2&1 > /dev/null")
+    end
+  end
+
+  # restart
+  def restart
+    require 'pathname'
+    pid_dir = Pathname.new(self.pid) + ".."
+    pid_file_template = self.pid.split('/')[-1].gsub('.pid','')
+    count = 0
+    pids = Array.new
+    while count != self.servers
+      pids << pid_dir.to_s + "/#{pid_file_template}.#{self.port + count}.pid"
+      count += 1
+    end
+    pids.each do |d_pid|
+      Dir.chdir(self.chdir)
+      system("bundle exec thin -P #{d_pid} restart 2&1 > /dev/null")
     end
   end
 end
 
+# handling options
+options = Hash.new
+
+optparse = OptionParser.new do |opts|
+  # set banner
+  opts.banner = "Usage: bundle_thin_starter.rb [options]"
+
+  # the config dir
+  options[:config_dir] = "config"
+  opts.on( '-c', '--config DIR', 'The dir where the yml config files are stored.' ) do
+    options[:config_dir] = DIR
+  end
+
+  # help
+  opts.on( '-h', '--help', 'Display this screen.' ) do
+    puts opts
+    exit
+  end
+
+  # start action
+  options[:start] = false
+  opts.on('--start', 'Start the servers') do
+    options[:start] = true
+  end
+
+  # stop action
+  options[:stop] = false
+  opts.on('--stop', 'Stop the servers') do
+    options[:stop] = true
+  end
+
+  # restart action
+  options[:restart] = false
+  opts.on('--restart', 'Restart the servers') do
+    options[:restart] = true
+  end
+end
+
+# loading the confs
 servers = Array.new
-Dir['config/*.yml'].each do |f|
+Dir['#{options[:config_dir]}/*.yml'].each do |f|
   servers << ThinServer.new(YAML.load_file(f)["server"])
 end
-servers.each do |s|
-  #printf("Starting #{s.name} thin server :")
-  #if s.start
-  #  printf("\tOK\n")
-  #else
-  #  printf("\tKO\n")
-  #end
-  printf("Stopping #{s.name} thin server : ")
-  if s.stop
-    printf("\tOK\n")
-  else
-    printf("\tKO\n")
+
+# triggering the commands
+
+if options[:start]
+  servers.each do |s|
+    printf("Starting #{s.name} thin server :")
+    if s.start
+      printf("\tOK\n")
+    else
+      printf("\tKO\n")
+    end
+  end
+end
+
+if options[:restart]
+  servers.each do |s|
+    printf("Restarting #{s.name} thin server :")
+    if s.restart
+      printf("\tOK\n")
+    else
+      printf("\tKO\n")
+    end
+  end
+end
+
+if options[:stop]
+  servers.each do |s|
+    printf("Stopping #{s.name} thin server : ")
+    if s.stop
+      printf("\tOK\n")
+    else
+      printf("\tKO\n")
+    end
   end
 end
 
