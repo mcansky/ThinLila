@@ -5,7 +5,7 @@ require 'optparse'
 
 # the class to handle the servers
 class ThinServer
-  attr_accessor :name, :chdir, :address, :port, :socket, :env, :daemonize, :log, :pid, :user, :group, :servers
+  attr_accessor :name, :chdir, :address, :port, :socket, :env, :daemonize, :debug, :log, :pid, :user, :group, :servers
   # initialize method
   # yml file syntax :
   #server:
@@ -38,6 +38,7 @@ class ThinServer
     @log = yaml_hash['log']
     @pid = yaml_hash['pid']
     @servers = yaml_hash['servers'] || 5
+    @debug = false
   end
 
   # return the option string
@@ -53,6 +54,7 @@ class ThinServer
     options << "-u #{self.user}" if self.user
     options << "-g #{self.group}" if self.group
     options << "-s #{self.servers}"
+    options << "-D" if self.debug
     return options.join(" ")
   end
 
@@ -115,6 +117,12 @@ optparse = OptionParser.new do |opts|
     puts opts
     exit
   end
+  
+  # debug / verbose
+  options[:debug] = false
+  opts.on('-D', '--debug', 'Set debug on.') do
+    options[:debug] = true
+  end
 
   # start action
   options[:start] = false
@@ -147,6 +155,8 @@ end
 if options[:start]
   servers.each do |s|
     printf("Starting #{s.name} thin server :")
+    s.debug = true if options[:debug]
+    printf(" -debug on-") if options[:debug]
     if s.start
       printf("\tOK\n")
     else
