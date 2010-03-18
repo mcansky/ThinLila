@@ -5,7 +5,7 @@ require 'optparse'
 
 # the class to handle the servers
 class ThinServer
-  attr_accessor :name, :chdir, :address, :port, :socket, :env, :daemonize, :debug, :log, :pid, :user, :group, :servers
+  attr_accessor :name, :chdir, :address, :port, :socket, :env, :daemonize, :debug, :log, :pid, :duser, :dgroup, :servers
   # initialize method
   # yml file syntax :
   #server:
