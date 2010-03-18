@@ -1,4 +1,4 @@
-This program is a quick starter of thin server instances inside a bundler environment.
+ThinLila is a quick starter of thin server instances inside a bundler environment.
 
 Create a config dir somewhere to hold yaml files using the following syntax :
 
@@ -20,7 +20,7 @@ server:
 
 Then use the script using the following syntax :
 <pre>
-	Usage: bundle_thin_starter.rb [options]
+	Usage: thin_lila.rb [options]
 	    -c, --config DIR                 The dir where the yml config files are stored.
 	    -h, --help                       Display this screen.
 	        --start                      Start the servers

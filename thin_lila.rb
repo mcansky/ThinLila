@@ -102,7 +102,7 @@ options = Hash.new
 
 optparse = OptionParser.new do |opts|
   # set banner
-  opts.banner = "Usage: bundle_thin_starter.rb [options]"
+  opts.banner = "Usage: thin_lila.rb [options]"
 
   # the config dir
   options[:config_dir] = "config"
