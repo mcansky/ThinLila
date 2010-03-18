@@ -106,8 +106,8 @@ optparse = OptionParser.new do |opts|
 
   # the config dir
   options[:config_dir] = "config"
-  opts.on( '-c', '--config DIR', 'The dir where the yml config files are stored.' ) do
-    options[:config_dir] = DIR
+  opts.on( '-c', '--config DIR', 'The dir where the yml config files are stored.' ) do |dir|
+    options[:config_dir] = dir
   end
 
   # help
