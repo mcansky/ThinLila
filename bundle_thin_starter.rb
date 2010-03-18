@@ -1,6 +1,6 @@
 #!/bin/env ruby
 require 'yaml'
-require 'optionparser'
+require 'optparse'
 # Bundle thin starter
 
 # the class to handle the servers
