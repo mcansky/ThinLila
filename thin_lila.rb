@@ -89,7 +89,7 @@ class ThinServer
     count = 0
     pids = Array.new
     while count != self.servers
-      pids << pid_dir.to_s + "/#{pid_file_template}.#{self.port + count}.pid"
+      pids << "tmp/#{pid_file_template}.#{self.port + count}.pid"
       count += 1
     end
     pids.each do |d_pid|
