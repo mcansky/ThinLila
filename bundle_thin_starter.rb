@@ -134,10 +134,11 @@ optparse = OptionParser.new do |opts|
     options[:restart] = true
   end
 end
+optparse.parse!
 
 # loading the confs
 servers = Array.new
-Dir['#{options[:config_dir]}/*.yml'].each do |f|
+Dir["#{options[:config_dir]}/*.yml"].each do |f|
   servers << ThinServer.new(YAML.load_file(f)["server"])
 end
 
