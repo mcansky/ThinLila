@@ -106,22 +106,34 @@ optparse = OptionParser.new do |opts|
     puts opts
     exit
   end
-  
+
   # dry run
   options[:test] = false
   opts.on('-t', '--test', 'Display the commands that are going to be run') do
     options[:test] = true
   end
-  
+
   # debug / verbose
   options[:debug] = false
   opts.on('-D', '--debug', 'Set debug on.') do
     options[:debug] = true
   end
 
+  # list the servers
   options[:list] = false
   opts.on('-l', '--list', 'List the servers') do
     options[:list] = true
+  end
+
+  # only act on one server
+  options[:name] = nil
+  opts.on('-n', '--name NAME', 'Act on a particular server') do |name|
+    server = nil
+    servers.each do |s|
+      if s.name == name
+        server = s
+      end
+    end
   end
 
   # start action
@@ -145,12 +157,21 @@ end
 optparse.parse!
 
 # loading the confs
-servers = Array.new
+config_servers = Array.new
 Dir["#{options[:config_dir]}/*.yml"].each do |f|
-  servers << ThinServer.new(YAML.load_file(f)["server"])
+  config_servers << ThinServer.new(YAML.load_file(f)["server"])
+end
+
+if options[:list]
+  servers.each do |s|
+    puts "#{s.name} #{s.address}:#{s.port} (#{s.servers} servers)"
+  end
 end
 
 # triggering the commands
+servers = Array.new
+servers << server if server
+servers = config_servers unless server
 
 if options[:start] && !options[:test]
   servers.each do |s|
