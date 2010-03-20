@@ -162,16 +162,16 @@ Dir["#{options[:config_dir]}/*.yml"].each do |f|
   config_servers << ThinServer.new(YAML.load_file(f)["server"])
 end
 
+# triggering the commands
+servers = Array.new
+servers << server if options[:name]
+servers = config_servers unless options[:name]
+
 if options[:list]
   servers.each do |s|
     puts "#{s.name} #{s.address}:#{s.port} (#{s.servers} servers)"
   end
 end
-
-# triggering the commands
-servers = Array.new
-servers << server if server
-servers = config_servers unless server
 
 if options[:start] && !options[:test]
   servers.each do |s|
