@@ -7,17 +7,16 @@ class ThinServer
   # initialize method
   # yml file syntax :
   #server:
-  #  name: one          # optional
+  #  name: one          # mandatory
   #  address: 0.0.0.0   # mandatory
   #  port: 3000         # mandatory
   #  socket: nil        # optionnal
   #  chdir: /Users/mcansky/Code/arbousier3/arbousierR   # mandatory
   #  env: development   # mandatory
-  #  daemonize: true    # optionnal (default : false)
+  #  daemonize: true    # optionnal (default : true)
   #  duser: mcansky     # optionnal
   #  dgroup: users      # optionnal
-  #  log: /Users/mcansky/Code/arbousier3/arbousierR/log/thin.log  # mandatory
-  #  pid: /Users/mcansky/tmp/thin_one.pid     # mandatory
+  #  log: log/thin.log  # mandatory
   #  servers: 3         # optionnal (default : 5)
   def load(yaml_file)
     yaml_hash = YAML.load_file(yaml_file)["server"]
@@ -31,7 +30,7 @@ class ThinServer
     end
     @chdir = yaml_hash['chdir']
     @env = yaml_hash['env']
-    @daemonize = yaml_hash['daemonize'] || false
+    @daemonize = yaml_hash['daemonize'] || true
     @duser = yaml_hash['duser']
     @dgroup = yaml_hash['dgroup']
     @log = yaml_hash['log']
