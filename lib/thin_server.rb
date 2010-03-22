@@ -108,4 +108,9 @@ class ThinServer
     end
     return running
   end
+
+  def running_instances(n)
+    return true if self.check_status && self.servers == n
+    return false
+  end
 end
