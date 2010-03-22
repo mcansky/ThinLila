@@ -106,5 +106,6 @@ class ThinServer
         running = false
       end
     end
+    return running
   end
 end
