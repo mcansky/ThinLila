@@ -4,6 +4,7 @@ Feature: Load a server config from a yaml file
 
 Scenario: A yaml file
 	Given the file config/config.yml
+	And a server
 	When loading the file
 	Then the server should have a name
 	And the server should have an ip address

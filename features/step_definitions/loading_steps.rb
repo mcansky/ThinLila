@@ -1,27 +1,31 @@
-Given /^the file config\/config\.yml$/ do
-  pending # express the regexp above with the code you wish you had
+Given /^the file config\/config.yml$/ do
+  File.exist?("config/config.yml")
+end
+
+Given /^a server$/ do
+  @server = ThinServer.new
 end
 
 When /^loading the file$/ do
-  pending # express the regexp above with the code you wish you had
+  @server.load("config/config.yml")
 end
 
 Then /^the server should have a name$/ do
-  pending # express the regexp above with the code you wish you had
+  @server.name
 end
 
 Then /^the server should have an ip address$/ do
-  pending # express the regexp above with the code you wish you had
+  @server.address
 end
 
 Then /^the server should have a port$/ do
-  pending # express the regexp above with the code you wish you had
+  @server.port
 end
 
 Then /^the server should have a path$/ do
-  pending # express the regexp above with the code you wish you had
+  @server.path
 end
 
 Then /^the server should have servers$/ do
-  pending # express the regexp above with the code you wish you had
+  @server.servers
 end

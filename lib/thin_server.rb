@@ -1,6 +1,9 @@
 # the class to handle the servers
 class ThinServer
   attr_accessor :name, :chdir, :address, :port, :socket, :env, :daemonize, :debug, :log, :pid, :duser, :dgroup, :servers
+  def initialize()
+  end
+
   # initialize method
   # yml file syntax :
   #server:
@@ -16,7 +19,8 @@ class ThinServer
   #  log: /Users/mcansky/Code/arbousier3/arbousierR/log/thin.log  # mandatory
   #  pid: /Users/mcansky/tmp/thin_one.pid     # mandatory
   #  servers: 3         # optionnal (default : 5)
-  def initialize(yaml_hash)
+  def load(yaml_file)
+    yaml_hash = YAML.load_file(yaml_file)["server"]
     @name = yaml_hash['name']
     @address = yaml_hash['address']
     @port = yaml_hash['port']
