@@ -88,4 +88,23 @@ class ThinServer
   def path
     return self.chdir
   end
+
+  def check_status
+    require 'pathname'
+    pid_dir = Pathname.new(self.chdir)
+    running = false
+    count = 0
+    pids = Array.new
+    while count != self.servers
+      pids << pid_dir.to_s + "/tmp/pids/thin.#{self.port + count}.pid"
+      count += 1
+    end
+    pids.each do |pid|
+      if File.exist?(pid)
+        running = true
+      else
+        running = false
+      end
+    end
+  end
 end
