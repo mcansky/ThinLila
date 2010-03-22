@@ -29,3 +29,11 @@ end
 Then /^the server should have servers$/ do
   @server.servers
 end
+
+Then /^the server should have a log$/ do
+  @server.log
+end
+
+Then %r{^the server should have an environment$} do
+end
+
