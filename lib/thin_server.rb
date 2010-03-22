@@ -89,6 +89,7 @@ class ThinServer
     return self.chdir
   end
 
+  # check the status of the server
   def check_status
     require 'pathname'
     pid_dir = Pathname.new(self.chdir)
@@ -109,6 +110,7 @@ class ThinServer
     return running
   end
 
+  # check if all wanted instances are running
   def running_instances(n)
     return true if self.check_status && self.servers == n
     return false
