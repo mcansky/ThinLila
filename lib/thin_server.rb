@@ -85,4 +85,8 @@ class ThinServer
     self.stop
     self.start
   end
+
+  def path
+    return self.chdir
+  end
 end
