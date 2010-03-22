@@ -7,3 +7,4 @@ Scenario: a running server
   When started
   Then the server should be running
   And the server should have 5 instances
+	And the server should stop

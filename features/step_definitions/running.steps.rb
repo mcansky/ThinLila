@@ -8,9 +8,14 @@ When /^started$/ do
 end
 
 Then /^the server should be running$/ do
-  pending # express the regexp above with the code you wish you had
+  @server.check_status
 end
 
-Then /^the server should have 5 instances$/ do
-  pending # express the regexp above with the code you wish you had
+Then /^the server should have ([\d+]) instances$/ do |n|
+  @server.running_instances(n)
 end
+
+Then /^the server should stop$/ do
+  @server.stop
+end
+
