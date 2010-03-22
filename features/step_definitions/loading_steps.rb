@@ -1,5 +1,6 @@
-Given /^the file config\/config.yml$/ do
-  File.exist?("config/config.yml")
+Given /^the file "([^\"]*)"$/ do |file|
+  File.exist?(file)
+  @file = file
 end
 
 Given /^a server$/ do
@@ -7,7 +8,7 @@ Given /^a server$/ do
 end
 
 When /^loading the file$/ do
-  @server.load("config/config.yml")
+  @server.load(@file)
 end
 
 Then /^the server should have a name$/ do

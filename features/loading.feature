@@ -3,7 +3,7 @@ Feature: Load a server config from a yaml file
 	I want to get the vars needed
 
 Scenario: A yaml file
-	Given the file config/config.yml
+	Given the file "config/config.yml"
 	And a server
 	When loading the file
 	Then the server should have a name
