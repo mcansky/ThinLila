@@ -1,7 +1,20 @@
 # the class to handle the servers
 class ThinServer
   attr_accessor :name, :chdir, :address, :port, :socket, :env, :daemonize, :debug, :log, :pid, :duser, :dgroup, :servers
-  def initialize()
+  def initialize
+    @name = nil
+    @address = nil
+    @port = nil
+    @socket = nil
+    @chdir = nil
+    @env = nil
+    @daemonize = true
+    @duser = nil
+    @dgroup = nil
+    @log = nil
+    @pid = nil
+    @servers = 5
+    @debug = false
   end
 
   # initialize method
