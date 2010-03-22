@@ -11,3 +11,5 @@ Scenario: A yaml file
 	And the server should have a port
 	And the server should have a path
 	And the server should have servers
+	And the server should have a log
+	And the server should have an environment

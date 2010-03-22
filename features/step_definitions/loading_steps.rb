@@ -35,5 +35,6 @@ Then /^the server should have a log$/ do
 end
 
 Then %r{^the server should have an environment$} do
+  @server.env
 end
 
