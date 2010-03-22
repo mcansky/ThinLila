@@ -6,6 +6,8 @@ require 'optparse'
 
 # handling options
 options = Hash.new
+#
+server = nil
 
 optparse = OptionParser.new do |opts|
   # set banner
@@ -75,7 +77,12 @@ optparse.parse!
 # loading the confs
 config_servers = Array.new
 Dir["#{options[:config_dir]}/*.yml"].each do |f|
-  config_servers << ThinServer.new(YAML.load_file(f)["server"])
+  a_s = ThinServer.new
+  a_s.load(f)
+  config_servers << a_s
+end
+if config_servers.size < 1
+  return 1
 end
 
 # triggering the commands
